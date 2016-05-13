@@ -8,13 +8,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 
+import com.example.talizorah.financehelper.Controllers.GoogleApiController;
+
 import com.example.talizorah.financehelper.Controllers.CashMashinesController;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     private CashMashinesController controller;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
+    private GoogleApiController googleApiController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +26,18 @@ public class MainActivity extends AppCompatActivity {
         findViews();
         controller = CashMashinesController.createCashMashineController(recyclerView, progressBar, this);
         controller.setData();
+        googleApiController = new GoogleApiController(this);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        googleApiController.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        googleApiController.resume();
     }
 
     private void findViews(){
