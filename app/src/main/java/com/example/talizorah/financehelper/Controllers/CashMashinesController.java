@@ -35,10 +35,14 @@ public class CashMashinesController {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private AlertDialog.Builder alert;
+    private GeolocationController geolocationController;
+    private GoogleApiController apiController;
     private CashMashinesController(RecyclerView recyclerView, ProgressBar progressBar,  Activity activity){
         this.recyclerView = recyclerView;
         this.activity = activity;
         this.progressBar = progressBar;
+        this.geolocationController = new GeolocationController(activity);
+        this.apiController = new GoogleApiController(activity);
     }
     public static CashMashinesController createCashMashineController(RecyclerView recyclerView,
                                                                      ProgressBar progressBar,
@@ -52,6 +56,9 @@ public class CashMashinesController {
             @Override
             public void onAsynkTaskFinish(Object object) {
                 List<CashMashine> cashMashineList = (List<CashMashine>)object;
+                if(cashMashineList.size() == 0){
+                    noItemsDialog();
+                }
                 cashMashineAdapter = new CashMashineList(activity, cashMashineList);
                 recyclerView.setAdapter(cashMashineAdapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(activity));
@@ -132,6 +139,51 @@ public class CashMashinesController {
             e.printStackTrace();
         }
         this.address = "https://api.privatbank.ua/p24api/infrastructure?json&atm&address=" + address + "&city=" + city;
+    }
+
+    public void setAddressWithGeo(){
+        try {
+            String [] address = geolocationController.getAddress(apiController.getLatitude(), apiController.getLongitude());
+            createAddress(address[0], address[1]);
+            setData();
+        }catch (IOException ex){
+            ex.printStackTrace();
+        }
+    }
+
+    public void resumeGeo(){
+        apiController.resume();
+    }
+    public void pauseGeo(){
+        apiController.pause();
+    }
+
+    private void noItemsDialog(){
+        alert = new AlertDialog.Builder(activity);
+        alert.setTitle(R.string.no_item_tittle);
+        alert.setMessage(R.string.no_item_message);
+        alert.setPositiveButton(R.string.no_item_manual, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                setAddress();
+            }
+        });
+        alert.setNegativeButton(R.string.no_item_geo, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                setAddressWithGeo();
+            }
+        });
+        alert.setNeutralButton(R.string.no_item_exit, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                activity.finish();
+            }
+        });
+        alert.show();
     }
 
 }

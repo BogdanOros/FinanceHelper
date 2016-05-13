@@ -17,7 +17,6 @@ public class MainActivity extends AppCompatActivity{
     private CashMashinesController controller;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
-    private GoogleApiController googleApiController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,18 +25,17 @@ public class MainActivity extends AppCompatActivity{
         findViews();
         controller = CashMashinesController.createCashMashineController(recyclerView, progressBar, this);
         controller.setData();
-        googleApiController = new GoogleApiController(this);
     }
     @Override
     protected void onPause() {
         super.onPause();
-        googleApiController.pause();
+        controller.pauseGeo();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        googleApiController.resume();
+        controller.resumeGeo();
     }
 
     private void findViews(){
@@ -54,12 +52,13 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.address_settings){
-            controller.setAddress();
+        int id = item.getItemId();
+        if(id == R.id.address_settings){
+            controller.setAddressWithGeo();
             return true;
         }
-        if (item.getItemId() == R.id.settings_item) {
-            startActivity(new Intent(this, SettingsActivity.class));
+        if(id == R.id.manual_address){
+            controller.setAddress();
             return true;
         }
         return super.onOptionsItemSelected(item);

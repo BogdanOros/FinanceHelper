@@ -19,4 +19,10 @@
 
     <string name="google_maps_key" templateMergeStrategy="preserve">AIzaSyD4k7uKHkKG1hYzzPm10jE-bovwb_nHxzQ</string>
 
+
+    <string name="no_item_tittle">Попередження</string>
+    <string name="no_item_message">Пошук не дав результату</string>
+    <string name="no_item_exit">Вихід</string>
+    <string name="no_item_manual">Вручну</string>
+    <string name="no_item_geo">Геолокація</string>
 </resources>
