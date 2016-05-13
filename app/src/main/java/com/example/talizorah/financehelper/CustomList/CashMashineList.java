@@ -1,13 +1,12 @@
 package com.example.talizorah.financehelper.CustomList;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.example.talizorah.financehelper.CashMashine.CashMashine;
@@ -26,11 +25,22 @@ public class CashMashineList extends RecyclerView.Adapter<CashMashineList.CashVi
     private LayoutInflater inflater;
     private List<CashMashine> cashMashines = Collections.emptyList();
     private Calendar calendar;
+    private Context context;
+    private int lastPos = -1;
 
     public CashMashineList(Context context, List<CashMashine> cashMashines){
+        this.context = context;
         inflater = LayoutInflater.from(context);
         this.cashMashines = cashMashines;
         calendar = Calendar.getInstance();
+    }
+
+    public void animate(CashViewHolder viewHolder, int position) {
+        final Animation animation = AnimationUtils.loadAnimation(context,
+                (position > lastPos) ? R.anim.up_for_bottom
+                        : R.anim.down_from_top);
+        viewHolder.itemView.setAnimation(animation);
+        lastPos = position;
     }
 
     @Override
@@ -45,7 +55,9 @@ public class CashMashineList extends RecyclerView.Adapter<CashMashineList.CashVi
         CashMashine currentCash = cashMashines.get(position);
         holder.getAddressTextView().setText(currentCash.getAddress());
         calendar.setTime(new Date());
-        holder.getTimeTextView().setText(currentCash.getSchedule().get(calendar.get(Calendar.DAY_OF_WEEK)-1));
+        String resultTime = "Час роботи: " + currentCash.getSchedule().get(calendar.get(Calendar.DAY_OF_WEEK) - 1);
+        holder.getTimeTextView().setText(resultTime);
+        animate(holder, position);
     }
 
     @Override

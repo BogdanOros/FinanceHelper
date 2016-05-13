@@ -6,4 +6,5 @@
     <string name="allert_message">Відсутній доступ до мережі</string>
     <string name="allert_ok">Повторити</string>
     <string name="allert_cancel">Вихід</string>
+
 </resources>

@@ -3,6 +3,7 @@ package com.example.talizorah.financehelper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
 import android.widget.ProgressBar;
 
 import com.example.talizorah.financehelper.Controllers.CashMashinesController;
@@ -27,4 +28,10 @@ public class MainActivity extends AppCompatActivity {
         progressBar = (ProgressBar)findViewById(R.id.loading_bar);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.main_activity_menu, menu);
+        return true;
+    }
 }

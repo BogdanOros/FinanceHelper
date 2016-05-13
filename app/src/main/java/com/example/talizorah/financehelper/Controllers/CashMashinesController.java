@@ -22,6 +22,7 @@ import java.util.List;
  * Created by talizorah on 16.30.4.
  */
 public class CashMashinesController {
+    private String address = "https://api.privatbank.ua/p24api/infrastructure?json&atm&address=&city=%D0%9A%D0%B8%D0%B5%D0%B2";
     private CashMashineList cashMashineAdapter;
     private Activity activity;
     private RecyclerView recyclerView;
@@ -49,7 +50,7 @@ public class CashMashinesController {
                 progressBar.setVisibility(View.GONE);
             }
         });
-        loader.execute("https://api.privatbank.ua/p24api/infrastructure?json&atm&address=%D0%BF%D0%BE%D0%B1%D0%B5%D0%B4%D1%8B&city=%D0%9A%D0%B8%D0%B5%D0%B2");
+        loader.execute(address);
     }
     public void setData(){
         if(ConnectionChecker.isNetworkAvailable(activity)){
@@ -59,7 +60,7 @@ public class CashMashinesController {
             noInternetConnectionWarning();
         }
     }
-    public void noInternetConnectionWarning(){
+    private void noInternetConnectionWarning(){
         alert = new AlertDialog.Builder(activity);
         alert.setTitle(R.string.allert_tittle);
         alert.setMessage(R.string.allert_message);
