@@ -3,10 +3,14 @@ package com.example.talizorah.financehelper.Controllers;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.example.talizorah.financehelper.CashMashine.CashMashine;
@@ -16,6 +20,8 @@ import com.example.talizorah.financehelper.DataLoading.DataLoader;
 import com.example.talizorah.financehelper.DataLoading.ICompleted;
 import com.example.talizorah.financehelper.R;
 
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -24,6 +30,7 @@ import java.util.List;
 public class CashMashinesController {
     private String address = "https://api.privatbank.ua/p24api/infrastructure?json&atm&address=&city=%D0%9A%D0%B8%D0%B5%D0%B2";
     private CashMashineList cashMashineAdapter;
+    private String CASH_CONTROLLER = "cash_cont";
     private Activity activity;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
@@ -40,6 +47,7 @@ public class CashMashinesController {
     }
     private void loadData(){
         DataLoader loader = new DataLoader();
+        loader.setProgressBar(progressBar);
         loader.setTaskFinishOperation(new ICompleted() {
             @Override
             public void onAsynkTaskFinish(Object object) {
@@ -47,7 +55,7 @@ public class CashMashinesController {
                 cashMashineAdapter = new CashMashineList(activity, cashMashineList);
                 recyclerView.setAdapter(cashMashineAdapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(activity));
-                progressBar.setVisibility(View.GONE);
+
             }
         });
         loader.execute(address);
@@ -80,4 +88,50 @@ public class CashMashinesController {
         });
         alert.show();
     }
+
+    public void setAddress(){
+        LinearLayout layout = new LinearLayout(activity);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        final EditText cityBox = new EditText(activity);
+        cityBox.setHint(R.string.city_name);
+        layout.addView(cityBox);
+
+        final EditText addressBox = new EditText(activity);
+        addressBox.setHint(R.string.address_name);
+        layout.addView(addressBox);
+
+        alert = new AlertDialog.Builder(activity);
+        alert.setTitle(R.string.address_tittle);
+        alert.setMessage(R.string.address_message);
+        alert.setView(layout);
+
+        alert.setPositiveButton(R.string.address_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                createAddress(cityBox.getText().toString(), addressBox.getText().toString());
+                setData();
+            }
+        });
+        alert.setNegativeButton(R.string.address_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alert.show();
+    }
+
+    private void createAddress(String city, String address){
+        try {
+            city = URLEncoder.encode(city, "utf-8");
+            address = URLEncoder.encode(address, "utf-8");
+        }
+        catch (IOException e){
+            Log.v(CASH_CONTROLLER, "The url address in not valid");
+            e.printStackTrace();
+        }
+        this.address = "https://api.privatbank.ua/p24api/infrastructure?json&atm&address=" + address + "&city=" + city;
+    }
+
 }

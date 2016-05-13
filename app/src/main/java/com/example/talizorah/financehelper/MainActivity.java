@@ -1,9 +1,11 @@
 package com.example.talizorah.financehelper;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ProgressBar;
 
 import com.example.talizorah.financehelper.Controllers.CashMashinesController;
@@ -33,5 +35,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.main_activity_menu, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.address_settings){
+            controller.setAddress();
+            return true;
+        }
+        if (item.getItemId() == R.id.settings_item) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
