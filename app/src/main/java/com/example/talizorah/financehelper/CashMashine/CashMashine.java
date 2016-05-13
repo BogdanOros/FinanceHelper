@@ -1,12 +1,21 @@
 package com.example.talizorah.financehelper.CashMashine;
 
+import java.util.List;
+
 /**
  * Created by talizorah on 16.30.4.
  */
 public class CashMashine {
     private String address;
-    private String workingTime;
-    private String name;
+    private List<String> schedule;
+
+    public List<String> getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(List<String> schedule) {
+        this.schedule = schedule;
+    }
 
     public String getAddress() {
         return address;
@@ -14,21 +23,5 @@ public class CashMashine {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public String getWorkingTime() {
-        return workingTime;
-    }
-
-    public void setWorkingTime(String workingTime) {
-        this.workingTime = workingTime;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }

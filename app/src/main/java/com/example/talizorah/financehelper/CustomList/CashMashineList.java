@@ -13,7 +13,9 @@ import android.widget.TextView;
 import com.example.talizorah.financehelper.CashMashine.CashMashine;
 import com.example.talizorah.financehelper.R;
 
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,10 +25,12 @@ public class CashMashineList extends RecyclerView.Adapter<CashMashineList.CashVi
 
     private LayoutInflater inflater;
     private List<CashMashine> cashMashines = Collections.emptyList();
+    private Calendar calendar;
 
     public CashMashineList(Context context, List<CashMashine> cashMashines){
         inflater = LayoutInflater.from(context);
         this.cashMashines = cashMashines;
+        calendar = Calendar.getInstance();
     }
 
     @Override
@@ -40,12 +44,13 @@ public class CashMashineList extends RecyclerView.Adapter<CashMashineList.CashVi
     public void onBindViewHolder(CashViewHolder holder, int position) {
         CashMashine currentCash = cashMashines.get(position);
         holder.getAddressTextView().setText(currentCash.getAddress());
-        holder.getTimeTextView().setText(currentCash.getWorkingTime());
+        calendar.setTime(new Date());
+        holder.getTimeTextView().setText(currentCash.getSchedule().get(calendar.get(Calendar.DAY_OF_WEEK)-1));
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return cashMashines.size();
     }
 
     class CashViewHolder extends RecyclerView.ViewHolder{

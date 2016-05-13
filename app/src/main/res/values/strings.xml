@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">FinanceHelper</string>
+    <string name="app_name">Банкомати</string>
+
+    //Cash Mashine Controller
+    <string name="allert_tittle">Попередження</string>
+    <string name="allert_message">Відсутній доступ до мережі</string>
+    <string name="allert_ok">Повторити</string>
+    <string name="allert_cancel">Вихід</string>
 </resources>

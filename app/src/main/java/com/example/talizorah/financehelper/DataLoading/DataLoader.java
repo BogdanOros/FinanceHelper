@@ -3,6 +3,10 @@ package com.example.talizorah.financehelper.DataLoading;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.talizorah.financehelper.CashMashine.CashMashine;
+
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,26 +14,39 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by talizorah on 16.30.4.
  */
-public class DataLoader extends AsyncTask<String, Void, String> {
+public class DataLoader extends AsyncTask<String, Void, List<CashMashine>> {
     private String DATA_LOADER = "DATA_LOADER";
     private ICompleted taskCompleted;
+    private List<CashMashine> cashMashines = Collections.emptyList();
 
     public void setTaskFinishOperation(ICompleted completed){
         taskCompleted = completed;
     }
 
     @Override
-    protected String doInBackground(String... params) {
-        return downloadJson(params[0]);
+    protected List<CashMashine> doInBackground(String... params) {
+        String resultJson =  downloadJson(params[0]);
+        if(resultJson != null){
+            try {
+                return JsonParser.parseCashMachineJson(resultJson);
+            }
+            catch (JSONException ex){
+                Log.v(DATA_LOADER, "The result json not downloaded");
+                ex.printStackTrace();
+            }
+        }
+        return null;
     }
 
     @Override
-    protected void onPostExecute(String s) {
-        taskCompleted.onAsynkTaskFinish(s);
+    protected void onPostExecute(List<CashMashine> result) {
+        taskCompleted.onAsynkTaskFinish(result);
     }
 
     private String downloadJson(String urlAddress){
