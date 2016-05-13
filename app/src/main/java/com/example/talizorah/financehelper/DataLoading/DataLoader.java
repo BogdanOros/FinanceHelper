@@ -27,7 +27,6 @@ public class DataLoader extends AsyncTask<String, Void, List<CashMashine>> {
     private String DATA_LOADER = "DATA_LOADER";
     private ICompleted taskCompleted;
     private ProgressBar progressBar;
-    private List<CashMashine> cashMashines = Collections.emptyList();
 
     public void setTaskFinishOperation(ICompleted completed){
         taskCompleted = completed;

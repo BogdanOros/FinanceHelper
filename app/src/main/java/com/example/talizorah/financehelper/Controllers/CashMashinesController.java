@@ -3,12 +3,9 @@ package com.example.talizorah.financehelper.Controllers;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -37,12 +34,12 @@ public class CashMashinesController {
     private AlertDialog.Builder alert;
     private GeolocationController geolocationController;
     private GoogleApiController apiController;
-    private CashMashinesController(RecyclerView recyclerView, ProgressBar progressBar,  Activity activity){
+    private CashMashinesController(RecyclerView recyclerView, ProgressBar progressBar,  final Activity activity) {
         this.recyclerView = recyclerView;
         this.activity = activity;
         this.progressBar = progressBar;
+        this.apiController = GoogleApiController.getInstance(activity);
         this.geolocationController = new GeolocationController(activity);
-        this.apiController = new GoogleApiController(activity);
     }
     public static CashMashinesController createCashMashineController(RecyclerView recyclerView,
                                                                      ProgressBar progressBar,

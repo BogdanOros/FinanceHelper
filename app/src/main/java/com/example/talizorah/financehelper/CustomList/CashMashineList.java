@@ -1,5 +1,6 @@
 package com.example.talizorah.financehelper.CustomList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,9 +9,13 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.talizorah.financehelper.CashMashine.CashMashine;
+import com.example.talizorah.financehelper.Controllers.GeolocationController;
+import com.example.talizorah.financehelper.Controllers.GoogleApiController;
 import com.example.talizorah.financehelper.R;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Calendar;
 import java.util.Collections;
@@ -22,6 +27,7 @@ import java.util.List;
  */
 public class CashMashineList extends RecyclerView.Adapter<CashMashineList.CashViewHolder>{
 
+    private GeolocationController controller;
     private LayoutInflater inflater;
     private List<CashMashine> cashMashines = Collections.emptyList();
     private Calendar calendar;
@@ -65,7 +71,7 @@ public class CashMashineList extends RecyclerView.Adapter<CashMashineList.CashVi
         return cashMashines.size();
     }
 
-    class CashViewHolder extends RecyclerView.ViewHolder{
+    class CashViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView addressTextView;
         private TextView timeTextView;
@@ -74,6 +80,7 @@ public class CashMashineList extends RecyclerView.Adapter<CashMashineList.CashVi
             super(itemView);
             addressTextView = (TextView)itemView.findViewById(R.id.address);
             timeTextView = (TextView)itemView.findViewById(R.id.time);
+            itemView.setOnClickListener(this);
         }
 
         public TextView getAddressTextView() {
@@ -92,6 +99,19 @@ public class CashMashineList extends RecyclerView.Adapter<CashMashineList.CashVi
             this.timeTextView = timeTextView;
         }
 
+        @Override
+        public void onClick(View v) {
+            String[] result = addressTextView.getText().toString().split(",");
+            Activity tempAct = (Activity)v.getContext();
+            LatLng dest = GeolocationController.getLocationFromAddress(tempAct,
+                   result[1] + " " + result[2] + " " + result[3]);
+            LatLng source = GoogleApiController.getInstance(tempAct).createLatLng();
+            if(dest == null) {
+                Toast.makeText(tempAct, "Геолокатор не може знайти дану адрессу", Toast.LENGTH_SHORT).show();
+            }
+            if(dest != null)
+                GeolocationController.createMap(source, dest, tempAct);
+        }
     }
 
 }

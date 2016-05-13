@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class JsonParser {
     public static List<CashMashine> parseCashMachineJson(String json) throws JSONException {
-        String address = "fullAddressUa";
+        String address = "fullAddressRu";
         String schedule = "tw";
         List<String> daysList = Arrays.asList( "sun", "mon", "tue", "wed", "thu", "fri", "sat");
         JSONObject parentObject = new JSONObject(json);

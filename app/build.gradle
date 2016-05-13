@@ -12,7 +12,11 @@ android {
         versionName "1.0"
     }
     buildTypes {
+        debug {
+            resValue "string", "google_maps_api_key", "[AIzaSyD4k7uKHkKG1hYzzPm10jE-bovwb_nHxzQ]"
+        }
         release {
+            resValue "string", "google_maps_api_key", "[AIzaSyD4k7uKHkKG1hYzzPm10jE-bovwb_nHxzQ]"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
